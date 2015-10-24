@@ -15,12 +15,12 @@ func init() {
 	testClient = NewClient("token")
 }
 
-func testHandler(rw http.ResponseWriter, req *http.Request) {
+func testHandler(w http.ResponseWriter, req *http.Request) {
 	res := &response{
 		Ok: true,
 	}
 	body, _ := json.Marshal(res)
-	rw.Write(body)
+	w.Write(body)
 }
 
 func TestSendMessage(t *testing.T) {
