@@ -12,7 +12,7 @@ const (
 	defaultBaseURL = "https://slack.com/api"
 )
 
-type responseBody struct {
+type response struct {
 	Ok    bool
 	Error string
 }
@@ -42,7 +42,7 @@ func (c *Client) SendMessage(channel, message string) error {
 	}
 	defer res.Body.Close()
 
-	resBody := &responseBody{}
+	resBody := &response{}
 	decoder := json.NewDecoder(res.Body)
 	if err := decoder.Decode(resBody); err != nil {
 		return err
