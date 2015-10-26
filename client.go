@@ -19,14 +19,26 @@ type response struct {
 
 type Client struct {
 	token   string
+	name    string
+	asUser  bool
 	BaseURL string
 }
 
 func NewClient(token string) *Client {
 	return &Client{
 		token:   token,
+		name:    "",
+		asUser:  false,
 		BaseURL: defaultBaseURL,
 	}
+}
+
+func (c *Client) SetName(name string) {
+	c.name = name
+}
+
+func (c *Client) SetAsUser(b bool) {
+	c.asUser = b
 }
 
 func (c *Client) SendMessage(channel, message string) error {
@@ -34,7 +46,11 @@ func (c *Client) SendMessage(channel, message string) error {
 	v.Set("token", c.token)
 	v.Set("channel", channel)
 	v.Set("text", message)
-	v.Set("as_user", "true")
+	if c.asUser {
+		v.Set("as_user", "true")
+	} else {
+		v.Set("username", c.name)
+	}
 
 	res, err := http.PostForm(fmt.Sprintf("%s/chat.postMessage", c.BaseURL), v)
 	if err != nil {
