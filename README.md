@@ -11,12 +11,14 @@ package main
 
 import (
 	"log"
+
 	"github.com/m0t0k1ch1/slackbot"
 )
 
 func main() {
-	c := slackbot.NewClient("an API token for your bot")
-	if err := c.SendMessage("#channel", "message"); err != nil {
+	c := slackbot.NewClient("api-token")
+	c.SetAsUser(true)
+	if err := c.SendMessage("#channel", "test"); err != nil {
 		log.Fatal(err)
 	}
 }
