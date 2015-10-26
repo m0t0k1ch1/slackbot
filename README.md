@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	c := slackbot.NewClient("api-token")
+	c := slackbot.NewClient("an API token for your bot")
 	if err := c.SendMessage("#channel", "message"); err != nil {
 		log.Fatal(err)
 	}
