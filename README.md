@@ -1,6 +1,6 @@
 # go-slack-poster
 
-[![GoDoc](https://godoc.org/github.com/m0t0k1ch1/slackbot?status.svg)](https://godoc.org/github.com/m0t0k1ch1/slackbot) [![wercker status](https://app.wercker.com/status/9b663f5536c8d7b8147b238613b336e3/s/master "wercker status")](https://app.wercker.com/project/bykey/9b663f5536c8d7b8147b238613b336e3)
+[![GoDoc](https://godoc.org/github.com/m0t0k1ch1/go-slack-poster?status.svg)](https://godoc.org/github.com/m0t0k1ch1/go-slack-poster) [![wercker status](https://app.wercker.com/status/251a9f2059e5668a7d34f07808b2a06f/s/master "wercker status")](https://app.wercker.com/project/byKey/251a9f2059e5668a7d34f07808b2a06f)
 
 Slack chat.postMessage API client for golang
 
