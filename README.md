@@ -4,7 +4,17 @@
 
 Slack chat.postMessage API client for golang
 
-## Example
+## Examples
+
+### Use as CLI
+
+``` sh
+$ go get -u github.com/m0t0k1ch1/go-slack-poster/cmd/slackpost
+$ slackpost -token <token> -channel <channel> -message <message>
+success
+```
+
+### Use in code
 
 ``` go
 package main
