@@ -1,6 +1,7 @@
 package slackposter
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -27,7 +28,7 @@ func TestSendMessage(t *testing.T) {
 	client := NewClient("token")
 	client.SetUri(ts.URL)
 
-	if err := client.SendMessage("#channel", "message"); err != nil {
+	if err := client.SendMessage(context.Background(), "#channel", "message"); err != nil {
 		t.Errorf("should not be fail: %v", err)
 	}
 }
