@@ -12,12 +12,12 @@ package main
 import (
 	"log"
 
-	"github.com/m0t0k1ch1/slackbot"
+	slackposter "github.com/m0t0k1ch1/go-slack-poster"
 )
 
 func main() {
-	c := slackbot.NewClient("api-token")
-	if err := c.SendMessage("#channel", "test"); err != nil {
+	client := slackposter.NewClient("your token")
+	if err := client.SendMessage("#channel", "message"); err != nil {
 		log.Fatal(err)
 	}
 }
