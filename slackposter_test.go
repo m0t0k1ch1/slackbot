@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestSendMessage(t *testing.T) {
+func TestSendText(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		b, err := json.Marshal(&response{
 			Ok: true,
