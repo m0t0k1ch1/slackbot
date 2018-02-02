@@ -22,23 +22,24 @@ func run() int {
 	var (
 		token   string
 		channel string
-		message string
+		text    string
 		timeout int
 	)
 
 	flag.StringVar(&token, "token", "", "token")
 	flag.StringVar(&channel, "channel", "", "channel")
-	flag.StringVar(&message, "message", "", "message")
+	flag.StringVar(&text, "text", "", "text")
 	flag.IntVar(&timeout, "timeout", DefaultTimeout, "HTTP request timeout (sec)")
 	flag.Parse()
 
 	if len(token) == 0 {
-		fmt.Println("no token")
-		return 1
+		return fail(fmt.Errorf("no token"))
 	}
-	if len(message) == 0 {
-		fmt.Println("no message")
-		return 1
+	if len(channel) == 0 {
+		return fail(fmt.Errorf("no channel"))
+	}
+	if len(text) == 0 {
+		return fail(fmt.Errorf("no text"))
 	}
 
 	client := slackposter.NewClient(token)
@@ -47,26 +48,32 @@ func run() int {
 	ctx, cancel := context.WithTimeout(ctx, time.Duration(timeout)*time.Second)
 	defer cancel()
 
-	doneCh := make(chan bool, 1)
 	errCh := make(chan error, 1)
 
 	go func() {
-		if err := client.SendMessage(ctx, channel, message); err != nil {
-			errCh <- err
-			return
-		}
-		doneCh <- true
+		errCh <- client.SendText(ctx, channel, text)
 	}()
 
 	select {
-	case <-doneCh:
-		fmt.Println("success")
-		return 0
 	case err := <-errCh:
-		fmt.Println(err)
-		return 1
+		if err != nil {
+			return fail(err)
+		}
+		return success()
 	case <-ctx.Done():
-		fmt.Println(ctx.Err())
-		return 1
+		return fail(ctx.Err())
 	}
+}
+
+func success() int {
+	return 0
+}
+
+func fail(err error) int {
+	printlnStdout(err)
+	return 1
+}
+
+func printlnStdout(v ...interface{}) {
+	fmt.Fprintln(os.Stdout, v...)
 }

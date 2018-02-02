@@ -10,8 +10,7 @@ Slack chat.postMessage API client for golang
 
 ``` sh
 $ go get -u github.com/m0t0k1ch1/go-slack-poster/cmd/slackpost
-$ slackpost -token <token> -channel <channel> -message <message>
-success
+$ slackpost -token <token> -channel <channel> -text <text>
 ```
 
 ### Use in code
