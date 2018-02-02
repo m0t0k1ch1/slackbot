@@ -11,7 +11,7 @@ import (
 func TestSendMessage(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		b, err := json.Marshal(&response{
-			OK: true,
+			Ok: true,
 		})
 		if err != nil {
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
@@ -28,7 +28,7 @@ func TestSendMessage(t *testing.T) {
 	client := NewClient("token")
 	client.SetUri(ts.URL)
 
-	if err := client.SendMessage(context.Background(), "#channel", "message"); err != nil {
+	if err := client.SendText(context.Background(), "#channel", "message"); err != nil {
 		t.Errorf("should not be fail: %v", err)
 	}
 }

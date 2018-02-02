@@ -20,14 +20,15 @@ success
 package main
 
 import (
+	"context"
 	"log"
 
 	slackposter "github.com/m0t0k1ch1/go-slack-poster"
 )
 
 func main() {
-	client := slackposter.NewClient("your token")
-	if err := client.SendMessage("#channel", "message"); err != nil {
+	client := slackposter.NewClient("xoxb-1234-56789abcdefghijklmnop")
+	if err := client.SendText(context.Background(), "#channel", "message"); err != nil {
 		log.Fatal(err)
 	}
 }

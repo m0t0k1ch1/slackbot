@@ -1,29 +1,33 @@
 package slackposter
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"net/url"
-	"strings"
 )
 
 const (
-	defaultUri    = "https://slack.com/api/chat.postMessage"
-	defaultAsUser = true
+	Uri    = "https://slack.com/api/chat.postMessage"
+	AsUser = true
 )
 
+type request struct {
+	Channel     string      `json:"channel"`
+	Text        string      `json:"text"`
+	Attachments interface{} `json:"attachments"`
+	AsUser      bool        `json:"as_user"`
+}
+
 type response struct {
-	OK    bool
-	Error string
+	Ok    bool   `json:"ok"`
+	Error string `json:"error"`
 }
 
 type Config struct {
-	Uri    string
-	Token  string
-	Name   string
-	AsUser bool
+	Uri   string
+	Token string
 }
 
 type Client struct {
@@ -35,10 +39,8 @@ func NewClient(token string) *Client {
 	return &Client{
 		Client: http.DefaultClient,
 		config: &Config{
-			Uri:    defaultUri,
-			Token:  token,
-			Name:   "",
-			AsUser: defaultAsUser,
+			Uri:   Uri,
+			Token: token,
 		},
 	}
 }
@@ -51,31 +53,29 @@ func (client *Client) SetToken(token string) {
 	client.config.Token = token
 }
 
-func (client *Client) SetName(name string) {
-	client.config.Name = name
-}
-
-func (client *Client) SetAsUser(b bool) {
-	client.config.AsUser = b
-}
-
-func (client *Client) SendMessage(ctx context.Context, channel, message string) error {
-	v := url.Values{}
-	v.Add("token", client.config.Token)
-	v.Add("channel", channel)
-	v.Add("text", message)
-	if client.config.AsUser {
-		v.Add("as_user", "true")
-	} else {
-		v.Add("username", client.config.Name)
+func (client *Client) SendText(ctx context.Context, channel, text string) error {
+	req := &request{
+		Channel: channel,
+		Text:    text,
+		AsUser:  AsUser,
 	}
 
-	req, err := http.NewRequest(http.MethodPost, client.config.Uri, strings.NewReader(v.Encode()))
+	b, err := json.Marshal(req)
+	if err != nil {
+		return err
+	}
+
+	return client.doApi(ctx, b)
+}
+
+func (client *Client) doApi(ctx context.Context, b []byte) error {
+	req, err := http.NewRequest(http.MethodPost, client.config.Uri, bytes.NewBuffer(b))
 	if err != nil {
 		return err
 	}
 	req.WithContext(ctx)
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Set("Authorization", "Bearer "+client.config.Token)
+	req.Header.Set("Content-type", "application/json; charset=utf-8")
 
 	resp, err := client.Do(req)
 	if err != nil {
@@ -83,11 +83,11 @@ func (client *Client) SendMessage(ctx context.Context, channel, message string) 
 	}
 	defer resp.Body.Close()
 
-	res := &response{}
-	if err := json.NewDecoder(resp.Body).Decode(res); err != nil {
+	var res response
+	if err := json.NewDecoder(resp.Body).Decode(&res); err != nil {
 		return err
 	}
-	if !res.OK {
+	if !res.Ok {
 		return fmt.Errorf(res.Error)
 	}
 
