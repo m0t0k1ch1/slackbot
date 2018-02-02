@@ -53,7 +53,7 @@ func (client *Client) SetToken(token string) {
 	client.config.Token = token
 }
 
-func (client *Client) SendMessage(ctx context.Context, channel, text string, attachments interface{}) error {
+func (client *Client) SendMessage(ctx context.Context, channel, text string, attachments []*Attachment) error {
 	req := &request{
 		Channel:     channel,
 		Text:        text,
