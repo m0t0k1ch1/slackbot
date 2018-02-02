@@ -27,7 +27,7 @@ import (
 
 func main() {
 	client := slackposter.NewClient("xoxb-1234-56789abcdefghijklmnop")
-	if err := client.SendText(context.Background(), "#channel", "message"); err != nil {
+	if err := client.SendMessage(context.Background(), "#channel", "text", nil); err != nil {
 		log.Fatal(err)
 	}
 }

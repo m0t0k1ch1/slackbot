@@ -51,7 +51,7 @@ func run() int {
 	errCh := make(chan error, 1)
 
 	go func() {
-		errCh <- client.SendText(ctx, channel, text)
+		errCh <- client.SendMessage(ctx, channel, text, nil)
 	}()
 
 	select {

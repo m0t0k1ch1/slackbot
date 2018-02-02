@@ -53,11 +53,12 @@ func (client *Client) SetToken(token string) {
 	client.config.Token = token
 }
 
-func (client *Client) SendText(ctx context.Context, channel, text string) error {
+func (client *Client) SendMessage(ctx context.Context, channel, text string, attachments interface{}) error {
 	req := &request{
-		Channel: channel,
-		Text:    text,
-		AsUser:  AsUser,
+		Channel:     channel,
+		Text:        text,
+		Attachments: attachments,
+		AsUser:      AsUser,
 	}
 
 	b, err := json.Marshal(req)

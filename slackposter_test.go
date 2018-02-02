@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestSendText(t *testing.T) {
+func TestSendMessage(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		b, err := json.Marshal(&response{
 			Ok: true,
@@ -28,7 +28,7 @@ func TestSendText(t *testing.T) {
 	client := NewClient("token")
 	client.SetUri(ts.URL)
 
-	if err := client.SendText(context.Background(), "#channel", "message"); err != nil {
+	if err := client.SendMessage(context.Background(), "#channel", "text", nil); err != nil {
 		t.Errorf("should not be fail: %v", err)
 	}
 }
