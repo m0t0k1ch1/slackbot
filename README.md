@@ -2,7 +2,7 @@
 
 [![GoDoc](https://godoc.org/github.com/m0t0k1ch1/go-slack-poster?status.svg)](https://godoc.org/github.com/m0t0k1ch1/go-slack-poster) [![wercker status](https://app.wercker.com/status/251a9f2059e5668a7d34f07808b2a06f/s/master "wercker status")](https://app.wercker.com/project/byKey/251a9f2059e5668a7d34f07808b2a06f)
 
-a Slack chat.postMessage API client written in Go
+a Slack chat.postMessage API client for Go
 
 ## Examples
 
